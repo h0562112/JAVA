@@ -3,6 +3,7 @@ package tw.org.iii.tutor;
 public class Poker {
 
 	public static void main(String[] args) {
+		long start = System.currentTimeMillis();
 		int [] poker = new int[52];
 		for (int i=0;i<poker.length;i++) {
 			int temp = (int)(Math.random()*52);
@@ -22,6 +23,8 @@ public class Poker {
 				i--;
 			}
 		}
+		long end = System.currentTimeMillis()-start;
+		System.out.println(end);
 	}
 
 }
