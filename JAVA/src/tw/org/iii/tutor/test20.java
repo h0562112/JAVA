@@ -6,7 +6,7 @@ public class test20 {
 		int a=1;
 		do {
 			System.out.println(a++);;
-		}while (a<10); //後側迴圈先執行{}內敘述在進行while回圈
+		}while (a<10); //迴圈先執行{}內敘述在進行while回圈
 	}
 
 }
