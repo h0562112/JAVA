@@ -13,7 +13,7 @@ public class test63 {
 		try {
 			DatagramSocket socket = new DatagramSocket();
 			DatagramPacket packet = new DatagramPacket(data, data.length, 
-					InetAddress.getByName("10.0.101.133"), 8888);
+					InetAddress.getByName("10.0.101.187"), 8888);
 			socket.send(packet);
 			socket.close();
 		} catch (Exception e) {

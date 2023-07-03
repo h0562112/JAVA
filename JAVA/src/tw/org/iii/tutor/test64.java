@@ -14,7 +14,15 @@ public class test64 {
 			DatagramPacket packet = new DatagramPacket(data, data.length);
 			socket.receive(packet);
 			socket.close();
-			System.out.println(new String(packet.getData()));
+			
+			InetAddress urip = packet.getAddress();
+			int len = packet.getLength();
+			byte[] data = packet.getData();
+			
+			String mesg = new String(data, 0, len);
+			
+			
+			System.out.println();
 		} catch (Exception e) {
 			System.out.println(e);
 		}
