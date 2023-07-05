@@ -11,6 +11,10 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
+import java.util.Properties;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -252,7 +256,7 @@ public class test1234V3 extends JFrame {
         isGameRunning = false;
 		initializeGame();
 		timer.stop();
-		if (score_Blue == 5) {
+		if (score_Blue == 2) {
 			
 			int choice = JOptionPane.showConfirmDialog(this,
 					"遊戲結束藍方勝利 " , "Game Over",
@@ -265,8 +269,8 @@ public class test1234V3 extends JFrame {
 				timer.stop();
 				
 			} else {
-				balljdbc balljdbc = new balljdbc();
-				balljdbc.balljdbc01();
+				balljdbc01();
+				
 				System.exit(0);
 			}
 			
@@ -301,6 +305,26 @@ public class test1234V3 extends JFrame {
 //			initializeGame();
 //		}
 //	}
+    public void balljdbc01() {
+		try {
+			Properties prop = new Properties();
+			prop.put("user", "root");
+			prop.put("password", "root");
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/iii",prop);
+			
+			Statement stmt = conn.createStatement();
+			
+			
+				int n = stmt.executeUpdate("INSERT INTO ballgame(name,score) VALUES ("+playerName+score_Blue+")");
+		
+			
+			
+			
+			
+		}catch(Exception e){
+			System.out.println(e);
+		}
+    }		
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(test1234V3::new);
