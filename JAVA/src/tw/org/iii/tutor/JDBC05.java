@@ -23,13 +23,14 @@ public class JDBC05 {
 			ResultSet rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
-				
+//				
 				String id = rs.getString("id");
 				String name = rs.getString("name");
 				String addr = rs.getString("addr");
 				String tel = rs.getString("tel");
 				System.out.println(String.format("%s:%s:%s:%s", id, name, addr, tel));
 			}
+			
 			
 		} catch (Exception e) {
 			System.out.println(e);

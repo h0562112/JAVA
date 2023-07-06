@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.Properties;
 
@@ -23,7 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
-import tw.org.iii.tutor.JDBC01;
+
 
 public class test1234V3 extends JFrame {
     protected static final int WIDTH = 600;
@@ -46,17 +47,19 @@ public class test1234V3 extends JFrame {
     private static final int PADDLE_Y_RED = HEIGHT - PADDLE_HEIGHT_RED - 790;
     private static final int PADDLE_Y = HEIGHT - PADDLE_HEIGHT_BLUE - 40;
     private static final int BALL_INITIAL_X = WIDTH / 2 - BALL_SIZE / 2;
-    private static final int BALL_INITIAL_Y = HEIGHT - PADDLE_HEIGHT_BLUE - 50 - BALL_SIZE;
+    private static final int BALL_INITIAL_Y = 20;
 
     public test1234V3() {
     	
+    	
+    	System.out.println();
     	
         setTitle("桌上曲棍球");
         setSize(WIDTH, HEIGHT);
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         showInputDialog();
-        gamePanel = new JPanel() {   //這段看不太懂
+        gamePanel = new JPanel() {   
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -128,7 +131,7 @@ public class test1234V3 extends JFrame {
 
     private void updateGame() {
         ballX += ballSpeedX;
-        ballY += ballSpeedY;
+        ballY =ballY + ballSpeedY;
         
         ballX_green += ballSpeedX_green;
         ballY_green += ballSpeedY_green;
@@ -256,7 +259,7 @@ public class test1234V3 extends JFrame {
         isGameRunning = false;
 		initializeGame();
 		timer.stop();
-		if (score_Blue == 2) {
+		if (score_Blue == 5) {
 			
 			int choice = JOptionPane.showConfirmDialog(this,
 					"遊戲結束藍方勝利 " , "Game Over",
@@ -269,8 +272,8 @@ public class test1234V3 extends JFrame {
 				timer.stop();
 				
 			} else {
-				balljdbc01();
 				
+				balljdbc01();				
 				System.exit(0);
 			}
 			
@@ -286,6 +289,8 @@ public class test1234V3 extends JFrame {
 				timer.stop();
 				
 			} else {
+				
+				balljdbc01();
 				System.exit(0);
 				
 			}
@@ -306,25 +311,47 @@ public class test1234V3 extends JFrame {
 //		}
 //	}
     public void balljdbc01() {
-		try {
-			Properties prop = new Properties();
-			prop.put("user", "root");
-			prop.put("password", "root");
-			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/iii",prop);
-			
-			Statement stmt = conn.createStatement();
-			
-			
-				int n = stmt.executeUpdate("INSERT INTO ballgame(name,score) VALUES ("+playerName+score_Blue+")");
-		
-			
-			
-			
-			
-		}catch(Exception e){
-			System.out.println(e);
-		}
-    }		
+    	try {
+            Properties prop = new Properties();
+            prop.put("user", "root");
+            prop.put("password", "root");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/iii",prop);
+            
+            if(score_Blue == 5) {
+            	 String query = "INSERT INTO ballgame(name, score) VALUES (?, ?)";
+                 PreparedStatement stmt = conn.prepareStatement(query);
+                 
+                 stmt.setString(1, playerName);
+                 stmt.setInt(2, score_Blue);
+                 
+                 try {
+                     stmt.executeUpdate();
+                 // 其餘的程式碼...                 
+             } catch (Exception e) {
+                 System.out.println(e);
+             }
+            }else if(score_Red == 5){
+            	String query = "INSERT INTO ballgame(name, score) VALUES (?, ?)";
+                PreparedStatement stmt = conn.prepareStatement(query);
+                
+                stmt.setString(1, playerName);
+                stmt.setInt(2, score_Red);
+                
+                try {
+                    stmt.executeUpdate();
+                // 其餘的程式碼...                 
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+            	}else {
+            		
+            	}
+            }catch(Exception e){
+            	System.out.println(e);
+            }
+            
+        
+    }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(test1234V3::new);
