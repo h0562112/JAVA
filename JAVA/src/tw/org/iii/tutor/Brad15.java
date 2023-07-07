@@ -35,3 +35,14 @@ public class Brad15 {
 	}
 
 }
+
+
+//JTextArea scoreArea = new JTextArea();
+//scoreArea.setEditable(false); // 設定為不可編輯
+//scoreArea.append("玩家名稱排行:\n");
+//int k = 0;
+//for (Integer Pscore : cad01.Player_score) {
+//	
+//	i++;
+//  playerNameArea.append(k+":"+Pscore + "\n"); // 在JTextArea中換行顯示名字
+//}

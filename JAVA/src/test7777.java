@@ -13,11 +13,22 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-public class test7777 extends JFrame {
+public class test7777 extends JFrame{
     private String playerName;
     private JPanel gamePanel;
 
     public void showInputDialog() {
+        playerName = JOptionPane.showInputDialog(this, "請輸入您的名字：", "輸入名字", JOptionPane.PLAIN_MESSAGE);
+        if (playerName == null || playerName.trim().isEmpty()) {
+            int choice = JOptionPane.showConfirmDialog(this, "確定要離開遊戲吗？", "離開遊戲", JOptionPane.YES_NO_OPTION);
+            if (choice == JOptionPane.YES_OPTION) {
+                System.exit(0);
+            } else {
+                showInputDialog();
+            }
+        }
+    }
+    public void showInputDialogG() {
         playerName = JOptionPane.showInputDialog(this, "請輸入您的名字：", "輸入名字", JOptionPane.PLAIN_MESSAGE);
         if (playerName == null || playerName.trim().isEmpty()) {
             int choice = JOptionPane.showConfirmDialog(this, "確定要離開遊戲吗？", "離開遊戲", JOptionPane.YES_NO_OPTION);
