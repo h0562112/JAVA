@@ -3,7 +3,7 @@ package teeee;
 import java.util.Scanner;
 
 public class testtt {
-
+//ss
 	public static void main(String[] args) {
 //		int a;
 //		int b;
