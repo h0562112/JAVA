@@ -4,27 +4,32 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Properties;
-import java.util.TimerTask;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
+import javax.swing.text.Highlighter.Highlight;
 
 
 
@@ -34,22 +39,22 @@ public class test12345V5 extends JFrame {
  
     
     
-protected static final int WIDTH = 600;
-private static final int HEIGHT = 800;
+	protected static final int WIDTH = 600;
+	private static final int HEIGHT = 800;
 
- private JPanel gamePanel;
- private Timer timer;
- private int ballX, ballY, ballX_green = BALL_INITIAL_X_green, ballY_green = BALL_INITIAL_Y_green;
- private int paddleX, paddleX_Red;
- private int ballSpeedX, ballSpeedY, ballSpeedX_green, ballSpeedY_green;
- private static int score_Blue;
- private int score_Red;
- private boolean isGameRunning; // 遊戲開始狀態為false尚未開始
- private static String playerName;
+	private JPanel gamePanel;
+	private Timer timer;
+	private int ballX, ballY, ballX_green = BALL_INITIAL_X_green, ballY_green = BALL_INITIAL_Y_green;
+	private int paddleX, paddleX_Red;
+	private int ballSpeedX, ballSpeedY, ballSpeedX_green, ballSpeedY_green;
+	private static int score_Blue;
+	private int score_Red;
+	private boolean isGameRunning; // 遊戲開始狀態為false尚未開始
+	private static String playerName;
 
- private ArrayList<Integer> Player_id = new ArrayList<Integer>();
- private static ArrayList<String> Player_name = new ArrayList<>();
- private static ArrayList<Integer> Player_score = new ArrayList<Integer>();
+	private ArrayList<Integer> Player_id = new ArrayList<Integer>();
+	public static ArrayList<String> Player_name = new ArrayList<String>();
+	private static ArrayList<String> Player_score = new ArrayList<String>();
  
     
     private static final int PADDLE_WIDTH_BLUE= 100;
@@ -75,7 +80,7 @@ private static final int HEIGHT = 800;
   setResizable(false);
   setDefaultCloseOperation(EXIT_ON_CLOSE);
  
-  
+
         
     
   gamePanel = new JPanel() { // 這段看不太懂
@@ -85,7 +90,7 @@ private static final int HEIGHT = 800;
                 draw(g);
             }
         };
-
+        
         gamePanel.setFocusable(true); //開啟鍵盤功能與setVisible相同意思
         gamePanel.setBackground(Color.BLACK); //設定視窗背景顏色
         gamePanel.addKeyListener(new KeyAdapter() {
@@ -100,7 +105,8 @@ private static final int HEIGHT = 800;
 
         setVisible(true); //顯示視窗
     }
-      
+
+    
     private void showInputDialog() {
         playerName = JOptionPane.showInputDialog(this, "請輸入您的名字：", "輸入名字", JOptionPane.PLAIN_MESSAGE);
            if (playerName == null || playerName.trim().isEmpty()) {
@@ -115,11 +121,12 @@ private static final int HEIGHT = 800;
        } 
     
     private void initializeGame() {
+    	
     	queryPlayerName();
         ballX = BALL_INITIAL_X;
         ballY = BALL_INITIAL_Y;
-//        ballX_green = BALL_INITIAL_X_green;
-//        ballY_green = BALL_INITIAL_Y_green;
+        ballX_green = BALL_INITIAL_X_green;
+        ballY_green = BALL_INITIAL_Y_green;
         
         paddleX = WIDTH / 2 - PADDLE_WIDTH_BLUE / 2;
         paddleX_Red = WIDTH / 2 - PADDLE_WIDTH_RED / 2;
@@ -248,8 +255,8 @@ private static final int HEIGHT = 800;
      
      
      try {
-    	 	Image backgroundImage = ImageIO.read(getClass().getResource("/桌上曲棍球桌.png"));
-            g.drawImage(backgroundImage, -2, -20, getWidth(), getHeight(), null);
+            Image backgroundImage = ImageIO.read(getClass().getResource("/桌上曲棍球桌.png"));
+            g.drawImage(backgroundImage, -4, -20, getWidth(), getHeight(), null);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -280,7 +287,7 @@ private static final int HEIGHT = 800;
         g.setFont(font); //將字體打小樣式套用到Graphics中
         
         g.setColor(Color.WHITE); //設定字體顏色
-        
+        repaint();
         
         
         
@@ -297,8 +304,8 @@ private static final int HEIGHT = 800;
         g.drawString("藍方得分: " + score_Blue, 10, HEIGHT/2 +35);
         g.drawString("紅方得分: " + score_Red, 10, HEIGHT/2 -55);
 //        g.drawString("玩家排名: " + Player_id, 10, HEIGHT/2 +85);
-        g.drawString("玩家名稱: " + Player_name, 10, HEIGHT/2 +115);
-        g.drawString("玩家得分: " + Player_score, 10, HEIGHT/2 +145);
+//        g.drawString("玩家名稱: " + Player_name, 10, HEIGHT/2 +115);
+//        g.drawString("玩家得分: " + Player_score, 10, HEIGHT/2 +145);
     
 }
         
@@ -307,7 +314,7 @@ private static final int HEIGHT = 800;
         int key = e.getKeyCode();
         int key1 = e.getKeyCode();
 
-
+       
         if (key1 == KeyEvent.VK_A) { //如果案A
             paddleX_Red -= 20;//X-20參數(往左走)
             if (paddleX_Red< 0) {
@@ -333,48 +340,54 @@ private static final int HEIGHT = 800;
         }
     }
 
-	private void gameOver() {
+    private void gameOver() {
+        
+        isGameRunning = false;
+  initializeGame();
+  timer.stop();
+  if (score_Blue == 5) {
+   
+   int choice = JOptionPane.showConfirmDialog(this,
+     "遊戲結束藍方勝利 " , "Game Over",
+     JOptionPane.YES_NO_OPTION);
+   
+   if (choice == JOptionPane.YES_OPTION) {
+	balljdbc01();
+	queryPlayerName();
+	   showInputDialog();
+    score_Blue=0;    
+    initializeGame();
+    timer.stop();
+    
+   } else {
+    balljdbc01();
+    queryPlayerName();  
+    System.exit(0);
+   }
+   
+  } else if (score_Red == 5) {
+   
+   int choice = JOptionPane.showConfirmDialog(this,
+     "遊戲結束紅方勝利" , "Game Over",
+     JOptionPane.YES_NO_OPTION);
+   if (choice == JOptionPane.YES_OPTION) {
+	   
+	  balljdbc01_Red();
+	queryPlayerName();
+	 showInputDialog();
+    score_Red=0;
+    initializeGame();    
+    timer.stop();
+  
+   } else {
+	   balljdbc01_Red();
+    System.exit(0);
+    
+   }
+  
+  }
 
-		isGameRunning = false;
-		initializeGame();
-		timer.stop();
-		if (score_Blue == 6) {
-
-			int choice = JOptionPane.showConfirmDialog(this, "遊戲結束藍方勝利 ", "Game Over", JOptionPane.YES_NO_OPTION);
-
-			if (choice == JOptionPane.YES_OPTION) {
-				balljdbc01();
-				score_Blue = 0;
-				initializeGame();
-				timer.stop();
-
-			} else {
-				balljdbc01();
-				queryPlayerName();
-
-				System.exit(0);
-			}
-
-		} else if (score_Red == 5) {
-
-			int choice = JOptionPane.showConfirmDialog(this, "遊戲結束紅方勝利", "Game Over", JOptionPane.YES_NO_OPTION);
-			if (choice == JOptionPane.YES_OPTION) {
-
-				balljdbc01();
-				score_Red = 0;
-				initializeGame();
-				timer.stop();
-
-			} else {
-				balljdbc01();
-				
-				System.exit(0);
-
-			}
-
-		}
-
-	}
+ }
 //                ". Do you want to play again?", "Game Over", JOptionPane.YES_NO_OPTION);
 //  if (score_Blue >= 5) {
 //   if (choice == JOptionPane.YES_OPTION) {
@@ -387,6 +400,34 @@ private static final int HEIGHT = 800;
 //   initializeGame();
 //  }
 // }
+    public void balljdbc01_Red() {
+        try {
+            Properties prop = new Properties();
+            prop.put("user", "root");
+            prop.put("password", "root");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/iii",prop);
+            
+            String query = "INSERT INTO ballgame(name, score) VALUES (?, ?)";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            
+            stmt.setString(1, playerName);
+            stmt.setInt(2, score_Red);
+            
+            try {
+                int n = stmt.executeUpdate();
+            } catch (Exception e) {
+                System.out.println(playerName);
+                System.out.println(score_Red);
+            }
+           
+            
+            // 其餘的程式碼...
+            
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+    
     public void balljdbc01() {
         try {
             Properties prop = new Properties();
@@ -422,7 +463,7 @@ private static final int HEIGHT = 800;
    prop.put("password", "root");
    Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/iii", prop);
 
-   String query = "SELECT * FROM ballgame ORDER BY score DESC LIMIT 1";
+   String query = "SELECT * FROM ballgame ORDER BY score DESC";
    PreparedStatement stmt = conn.prepareStatement(query);
 
   
@@ -432,7 +473,7 @@ private static final int HEIGHT = 800;
    while (rs.next()) {
     Player_id.add(rs.getInt("id"));
     Player_name.add(rs.getString("name"));
-    Player_score.add(rs.getInt("score"));
+    Player_score.add(rs.getString("score"));
 
 //    System.out.println("ID: " + Player_id);
 //    System.out.println("Name: " + Player_name);
@@ -446,9 +487,7 @@ private static final int HEIGHT = 800;
    System.out.println(e);
   }
  }
-public void rank() {
-	
-}
+
     public static void main(String[] args) {
 //        SwingUtilities.invokeLater(test1234V4::new);
        
@@ -460,50 +499,45 @@ public void rank() {
 //        for (String Pname : cad.Player_name) {
 //         System.out.println(Pname);
 //  }
+        
   
+  demo.setSize(680, 800);
   
-  demo.setSize(685, 800);
-  demo.setResizable(false);
-  demo.setVisible(true);
-  demo.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
-  
+        demo.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         demo.getContentPane().setLayout(new BorderLayout());
         
-//        JTextArea east = new JTextArea();
-//        JButton south = new JButton("South");
-//        JTextArea west = new JTextArea();
-//        JButton north = new JButton("North");
-        
-        JTextArea playerNameArea = new JTextArea();
-        playerNameArea.append("玩家名稱排行:\n");
-        int i = 0;
-        for (String Pname : cad.Player_name) {
-        	
+      
+        JTextArea east = new JTextArea();
+        JButton south = new JButton("South");
+        JTextArea west = new JTextArea("全玩家:");
+//        JTextArea west = new JTextArea("得分最高者:" + cad.Player_name);
+        JButton north = new JButton("North");
+//        west.append("\n最高玩家分數"+cad.Player_score);
+         int i = 0;
+         int j = 0;
+        for (String Pname : cad.Player_name ) { 
         	i++;
-            playerNameArea.append(i+":"+Pname + "\n"); // 在JTextArea中換行顯示名字
-        }
+        	west.append("\n"+"玩家"+i+":"+Pname);
+          
+   }
+        west.append("\n全玩家分數:");
+        for (String Pname : cad.Player_score ) { 
+        	j++;
+        	west.append("\n"+"玩家"+j+":"+Pname+"分");
+          
+   }
+        west.append("\n目前玩家:"+playerName);
         
-//      JTextArea scoreArea = new JTextArea();
-//      scoreArea.setEditable(false); // 設定為不可編輯
-//      scoreArea.append("玩家名稱排行:\n");
-//      int k = 0;
-//      for (Integer Pscore : cad.Player_score) {
-//      	
-//      	i++;
-//      	scoreArea.append(k+":"+Pscore + "\n"); // 在JTextArea中換行顯示名字
-//      }
-   
         
-        demo.add(playerNameArea, BorderLayout.WEST);
+        
+        
+        demo.add(west, BorderLayout.WEST);
+        
+        west.setEditable(false);
         demo.add(cad.gamePanel, BorderLayout.CENTER);
-        //demo.add(scoreArea, BorderLayout.EAST);
-        
-      
-      
-        
         
 
-        
+        demo.setVisible(true);
         
     }
 

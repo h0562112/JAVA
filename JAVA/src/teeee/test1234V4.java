@@ -41,7 +41,7 @@ public class test1234V4 extends JFrame {
 	private int ballX, ballY, ballX_green = BALL_INITIAL_X_green, ballY_green = BALL_INITIAL_Y_green;
 	private int paddleX, paddleX_Red;
 	private int ballSpeedX, ballSpeedY, ballSpeedX_green, ballSpeedY_green;
-	p static int score_Blue;
+	static int score_Blue;
 	private int score_Red;
 	private boolean isGameRunning; // 遊戲開始狀態為false尚未開始
 	public static String playerName;

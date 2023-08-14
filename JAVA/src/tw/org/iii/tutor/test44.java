@@ -5,9 +5,10 @@ import java.io.File;
 public class test44 {
 
 	public static void main(String[] args) {
-		File here = new File(".");
-		System.out.println(here.getAbsolutePath());
-		File dir1 = new File("./dir3/dir4/dir5/dir6");
+
+		File here = new File("D:\\1234");
+		//System.out.println(here.getAbsolutePath());
+		File dir1 = new File("D:\\1234\\dir3\\dir4\\dir5\\dir6");
 		if(dir1.exists()) {
 			System.out.println("OK");
 		}else {
@@ -15,5 +16,7 @@ public class test44 {
 			dir1.mkdirs();
 		}
 	}
-
+	
+	
+	
 }

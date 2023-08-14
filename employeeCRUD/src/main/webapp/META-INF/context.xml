@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context displayName="Servlet 3.0 Web Application" docBase="employeeCRUD" path="/employeeCRUD" reloadable="true">
+  <!-- SQL Server -->
+  <Resource name="jdbc/JSPDB" type="javax.sql.DataSource"
+      username="root" password="Do!ng123"
+      driverClassName="com.mysql.cj.jdbc.Driver"
+      url="jdbc:mysql://127.0.0.1:3306/JSPDB"
+      maxTotal="8"
+      maxIdle="4"
+      maxWaitMillis="5000"
+    />
+<!--   <Resource name="jdbc/JSPDB" type="javax.sql.DataSource" -->
+<!--       username="sa" password="sa123456" -->
+<!--       driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver" -->
+<!--       url="jdbc:sqlserver://127.0.0.1:1433;DatabaseName=JSPDB" -->
+<!--       maxTotal="8" -->
+<!--       maxIdle="4" -->
+<!--       maxWaitMillis="5000" -->
+<!--     /> -->
+
+</Context>
