@@ -1,4 +1,4 @@
-package lab03;
+package lab03.xml;
 /*
    本程式展示如何由輸入檔一次讀入一個位元組陣列，然後此將位元組陣列寫出到輸出檔，為傳統
   Java程式的寫法。 請以SpringFramework 的風格來改寫本程式。
@@ -14,21 +14,15 @@ package lab03;
 */
 import java.io.*;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
 public class ReadWriteBytesDemo {
 	public static void main(String[] args) throws IOException {
 		long s = 0, e = 0;
-//		File inFile = new File("data/SamplePictures.zip");
-//		File outFile = new File("data/SamplePicturesD.zip");
-		ApplicationContext ctx =
-				new ClassPathXmlApplicationContext("lab03/xml/Beans.xml");
+		File inFile = new File("data/SamplePictures.zip");
+		File outFile = new File("data/SamplePicturesD.zip");
 		
 		try(
-			FileInputStream fis = (FileInputStream) ctx.getBean("fis");
-			FileOutputStream fos = (FileOutputStream) ctx.getBean("fos");	
+			FileInputStream fis = new FileInputStream(inFile);
+			FileOutputStream fos = new FileOutputStream(outFile);	
 	    ) {
 			System.out.println("每次讀/寫8192個位元組");
 			s = System.currentTimeMillis();
@@ -41,7 +35,5 @@ public class ReadWriteBytesDemo {
 			e = System.currentTimeMillis();
 			System.out.println("時間差(每次讀/寫多個位元組)=" + (e - s));
 		} 
-		
-		((ConfigurableApplicationContext)ctx).close();
 	}
 }
