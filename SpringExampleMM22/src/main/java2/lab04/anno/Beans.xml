@@ -13,7 +13,7 @@
 <!--    		<constructor-arg value='2.5' /> -->
 <!--    </bean> -->
 
-<!-- 		<context:component-scan base-package="lab04.anno"></context:component-scan> -->
+		<context:component-scan base-package="lab04.anno"></context:component-scan>
 		
 		<bean id="speed" class="java.lang.Integer" >
 			<constructor-arg value="110" />

@@ -13,12 +13,16 @@
 <!--    		<constructor-arg value='2.5' /> -->
 <!--    </bean> -->
 
-		<context:component-scan base-package="lab04.anno"></context:component-scan>
+		<context:component-scan base-package="lab05.anno "></context:component-scan>
 		
-		<bean id="speed" class="java.lang.Integer" >
-			<constructor-arg value="110" />
-		</bean>	
+		
 		<bean id="hour" class="java.lang.Double">
-			<constructor-arg value="2.1" />
+			<constructor-arg value="10" />
+		</bean>	
+		<bean id="radius" class="java.lang.Double">
+			<constructor-arg value="100" />
+		</bean>	
+		<bean id="side" class="java.lang.Double">
+			<constructor-arg value="10" />
 		</bean>	
 	</beans>
