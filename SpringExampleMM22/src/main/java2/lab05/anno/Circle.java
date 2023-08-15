@@ -1,14 +1,16 @@
 package lab05.anno;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
-@Component
+@Component("cilly")
+@PropertySource("/lab04_05.properties")
 public class Circle implements ICircle {
 	
-	@Autowired
-	@Qualifier("side")
+//	@Autowired
+//	@Qualifier("side")
+	@Value("${lab05.radius}")
 	public double radius;
 
 	public Circle() {

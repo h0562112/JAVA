@@ -1,22 +1,26 @@
 package lab04.anno;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class Car implements ICar {
-	@Autowired
+	@Value("${lab04.car.speed}")
 	private Integer speed;
 
-	@Autowired
+	@Value("${lab04.car.hour}")
 	private Double hour;
-    
+	
+	@Value("${lab04.car.brand}")
+	private String brand; 
+	
 	public Car() {
 	}
 	
 	@Override
 	public void getComment() {
-		System.out.println("此車走了" + speed * hour + "公里");
+		System.out.println(brand +"車走了"+ speed * hour + "公里");
 	}
 
 	@Override
